@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage("Maven Build") { //Stage 1 will build POM.xml and will create binary
             when {
-                expression { params.ENVIRONMENT == 'QA' }
+                expression { params.ENVIRONMENT == 'main' }
             }
             steps {
                 sh '''
