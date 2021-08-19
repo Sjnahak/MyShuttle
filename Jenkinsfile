@@ -45,7 +45,7 @@ pipeline {
 			    dir ("${WORKSPACE}/src"){
 			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
                 sh '''
-                    docker build  . -t ${DOCKER_REG}/tomcat:${BUILD_NUMBER}
+                    docker build  . -t ${DOCKER_REG}/tomcat:tomcat${BUILD_NUMBER}
                 '''
 				}
 				}
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 rtDockerPush(
 					serverId: 'artifactory',
-					image: "${DOCKER_REG}/tomcat:${BUILD_NUMBER}",
+					image: "${DOCKER_REG}/tomcat:tomcat${BUILD_NUMBER}",
 					targetRepo: 'shuttle-docker-dev/',
 					buildName: "dev-shuttle",
                     buildNumber: "${BUILD_NUMBER}",
@@ -70,7 +70,7 @@ pipeline {
 			    dir ("${WORKSPACE}/src/db"){
 			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
                 sh '''
-                    docker build  . -t ${DOCKER_REG}/db:${BUILD_NUMBER}
+                    docker build  . -t ${DOCKER_REG}/db:db-${BUILD_NUMBER}
                 '''
 				}
 				}
@@ -81,7 +81,7 @@ pipeline {
             steps {
                 rtDockerPush(
 					serverId: 'artifactory',
-					image: "${DOCKER_REG}/db:${BUILD_NUMBER}",
+					image: "${DOCKER_REG}/db:db-${BUILD_NUMBER}",
 					targetRepo: 'shuttle-docker-dev/',
 					buildName: "dev-shuttle",
                     buildNumber: "${BUILD_NUMBER}",
