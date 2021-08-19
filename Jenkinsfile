@@ -16,6 +16,19 @@ pipeline {
           }
         }
         
+        stage('Static analysis') { //Stage 2 will run static analysis with SonarQube
+
+            environment {
+                scannerHome = tool 'sonar' //Defined globally in Jenkins configuration
+            }
+            steps {
+                withSonarQubeEnv('SONARQUBE') { //defines in configure section
+                    sh '''
+                        ${scannerHome}/sonar-scanner -Dproject.settings=sonar-project.properties
+                    '''
+                }
+            }
+        }
 		
         
     }
