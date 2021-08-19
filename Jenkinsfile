@@ -30,6 +30,35 @@ pipeline {
             }
         }
 		
+		stage("Copy war") { //Stage 1 will build POM.xml and will create binary
+            steps {
+                sh '''
+                    cp $WORKSPACE/target/ $WORKSPACE/src
+                '''
+          }
+        }
+		
+	stage("Docker image tomcat") { //Stage 1 will build POM.xml and will create binary
+            steps {
+	       withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
+                sh '''		    
+                    docker build  -f $WORKSPACE/src/Dockerfile -t ${DOCKER_REG}:${BUILD_NUMBER}"
+                '''
+          }
+        }
+		
+	stage('Docker-Push-tomcat') {
+            steps {
+                rtDockerPush(
+		    serverId: 'artifactory',
+		    image: "${DOCKER_REG}:${BUILD_NUMBER}",
+		    targetRepo: 'shuttle-docker-dev',
+		    buildName: "dev-shuttle",
+                    buildNumber: "${BUILD_NUMBER}",
+                )
+                
+            }
+        }
         
     }
     
