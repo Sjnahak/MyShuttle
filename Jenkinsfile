@@ -43,7 +43,7 @@ pipeline {
 			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
                 sh '''
 				    
-                    docker build  -f $WORKSPACE/src/Dockerfile -t ${DOCKER_REG}:${BUILD_NUMBER}"
+                    docker build  -f $WORKSPACE/src/Dockerfile -t ${DOCKER_REG}:${BUILD_NUMBER} .
                 '''
 				}
             }
