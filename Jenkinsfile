@@ -33,18 +33,21 @@ pipeline {
 		stage("Copy war") { //Stage 1 will build POM.xml and will create binary
             steps {
                 sh '''
-                    cp $WORKSPACE/target/myshuttledev.war $WORKSPACE/src
+                    cp $WORKSPACE/target/ $WORKSPACE/src
                 '''
           }
         }
 		
 		stage("Docker image tomcat") { //Stage 1 will build POM.xml and will create binary
+		    //DOCKER_REG=ip:8082/artifactory/shuttle-docker-dev/subfolder -from jenkins config
+			//docker login dockerreponame.jfrog.io
             steps {
+			    dir ("${WORKSPACE}/src"){
 			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
                 sh '''
-				    
-                    docker build  -f $WORKSPACE/src/Dockerfile -t ${DOCKER_REG}:${BUILD_NUMBER} .
+                    docker build  . -t ${DOCKER_REG}/tomcat:${BUILD_NUMBER}
                 '''
+				}
 				}
             }
         }
@@ -53,14 +56,40 @@ pipeline {
             steps {
                 rtDockerPush(
 					serverId: 'artifactory',
-					image: "${DOCKER_REG}:${BUILD_NUMBER}",
-					targetRepo: 'shuttle-docker-dev',
+					image: "${DOCKER_REG}/tomcat:${BUILD_NUMBER}",
+					targetRepo: 'shuttle-docker-dev/',
 					buildName: "dev-shuttle",
                     buildNumber: "${BUILD_NUMBER}",
                 )
                 
             }
         }
+		
+		stage("Docker image database") { //Stage 1 will build POM.xml and will create binary
+            steps {
+			    dir ("${WORKSPACE}/src/db"){
+			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
+                sh '''
+                    docker build  . -t ${DOCKER_REG}/db:${BUILD_NUMBER}
+                '''
+				}
+				}
+            }
+        }
+		
+		stage('Docker-Push-db') {
+            steps {
+                rtDockerPush(
+					serverId: 'artifactory',
+					image: "${DOCKER_REG}/db:${BUILD_NUMBER}",
+					targetRepo: 'shuttle-docker-dev/',
+					buildName: "dev-shuttle",
+                    buildNumber: "${BUILD_NUMBER}",
+                )
+                
+            }
+        }
+		
 	}
     
 }
