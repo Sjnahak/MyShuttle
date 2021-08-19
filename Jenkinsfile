@@ -33,7 +33,7 @@ pipeline {
 		stage("Copy war") { //Stage 1 will build POM.xml and will create binary
             steps {
                 sh '''
-                    cp $WORKSPACE/target/ $WORKSPACE/src
+                    cp $WORKSPACE/target/myshuttledev.war $WORKSPACE/src
                 '''
           }
         }
