@@ -1,0 +1,38 @@
+pipeline {
+
+  agent { node { label 'master' } }
+
+  stages {
+        stage('Deploy web deploy') {
+            steps {
+                script {
+		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
+                        configs: 'web-deploy.yaml',
+                        enableConfigSubstitution: true,
+                        secretNamespace: 'default',
+                        secretName: 'container-registry',
+                        dockerCredentials: [
+                            [credentialsId: 'jfrog', url: "${registry-url}"],
+                        ]
+                    )
+		        }
+            }
+        }
+	    stage('Deploy DB') {
+            steps {
+                script {
+                    kubernetesDeploy(configs: "db-deploy.yml", kubeconfigId: "mykubeconfig")
+		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
+                        configs: 'db-deploy.yaml',
+                        enableConfigSubstitution: true,
+                        secretNamespace: 'default',
+                        secretName: 'container-registry',
+                        dockerCredentials: [
+                            [credentialsId: 'jfrog', url: "${registry-url}"],
+                        ]
+                    )
+		        }
+            }
+        }
+	}
+}
