@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    db : db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: db
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        db: db
+    spec:
+      imagePullSecrets:
+        - name: container-registry
+      containers:
+        - image: ${reg_ip}:8082/shuttle-docker-dev/db:db-${build_num}
+          name: db
+          ports:
+            - containerPort: 3306
+          resources: {}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+   db: db
+  name: db
+spec:
+  ports:
+    - name: "mysql-port"
+      port: 3306
+      targetPort: 3306
+  selector:
+   db: db
