@@ -1,15 +1,14 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: web
-  name: web
+    db : db
+  name: db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web
+      db: db
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,15 +17,15 @@ spec:
   template:
     metadata:
       labels:
-        app: web
+        db: db
     spec:
       imagePullSecrets:
         - name: container-registry
       containers:
-        - image: ${reg_ip}/tomcat:tomcat-${build_num}
-          name: web
+        - image: ${reg_ip}:8082/shuttle-docker-dev/db:db-${build_num}
+          name: db
           ports:
-            - containerPort: 8080
+            - containerPort: 3306
           resources: {}
       restartPolicy: Always
 ---
@@ -34,14 +33,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: web
-  name: web
+   db: db
+  name: db
 spec:
-  type: NodePort
   ports:
-    - name: "web-port"
-      port: 8080
-      targetPort: 8080
-      nodePort: 30510
+    - name: "mysql-port"
+      port: 3306
+      targetPort: 3306
   selector:
-    app: web
+   db: db

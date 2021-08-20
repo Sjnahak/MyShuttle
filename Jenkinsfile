@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven 'maven' //maven configuration setup in Jenkins global configuration
     }
-    
+
     stages {
         stage("Maven Build") { //Stage 1 will build POM.xml and will create binary
             //when {
@@ -13,9 +13,9 @@ pipeline {
                 sh '''
                     mvn clean package -Dtest=FaresTest,SimpleTest
                 '''
-          }
+            }
         }
-        
+
         stage('Static analysis') { //Stage 2 will run static analysis with SonarQube
 
             environment {
@@ -29,67 +29,40 @@ pipeline {
                 }
             }
         }
-		
-		stage("Copy war") { //Stage 1 will build POM.xml and will create binary
+
+        stage("Copy war") { //Stage 1 will build POM.xml and will create binary
             steps {
                 sh '''
                     cp $WORKSPACE/target/myshuttledev.war $WORKSPACE/src
                 '''
-          }
+            }
         }
-		
-		stage("Docker image tomcat") { //Stage 1 will build POM.xml and will create binary
-		    //DOCKER_REG=ip:8082/artifactory/shuttle-docker-dev/subfolder -from jenkins config
-			//docker login dockerreponame.jfrog.io
+
+        stage("Docker image tomcat") { //Stage 1 will build POM.xml and will create binary
             steps {
-			    dir ("${WORKSPACE}/src"){
-			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
-                sh '''
+                dir ("${WORKSPACE}/src"){
+                withDockerRegistry(credentialsId: 'azurecr', url: "${azurecr_url}") {
+                    sh '''
                     docker build  . -t ${DOCKER_REG}/tomcat:tomcat-${BUILD_NUMBER}
-                '''
-				}
-				}
+					docker push ${DOCKER_REG}/tomcat:tomcat-${BUILD_NUMBER}
+                    '''
+                }
+                }
             }
         }
-		
-		stage('Docker-Push-tomcat') {
+
+        stage("Docker image database") { //Stage 1 will build POM.xml and will create binary
             steps {
-                rtDockerPush(
-					serverId: 'artifactory',
-					image: "${DOCKER_REG}/tomcat:tomcat-${BUILD_NUMBER}",
-					targetRepo: 'shuttle-docker-dev/',
-					buildName: "dev-shuttle",
-                    buildNumber: "${BUILD_NUMBER}",
-                )
-                
+                dir ("${WORKSPACE}/src/db"){
+                    withDockerRegistry(credentialsId: 'azurecr', url: "${azurecr_url}") {
+                        sh '''
+                            docker build  . -t ${DOCKER_REG}/db:db-${BUILD_NUMBER}
+                            docker push ${DOCKER_REG}/db:db-${BUILD_NUMBER}
+                        '''
+                    }
+                }
             }
         }
-		
-		stage("Docker image database") { //Stage 1 will build POM.xml and will create binary
-            steps {
-			    dir ("${WORKSPACE}/src/db"){
-			    withDockerRegistry(credentialsId: 'jfrog', url: "${jfrog_url}") {
-                sh '''
-                    docker build  . -t ${DOCKER_REG}/db:db-${BUILD_NUMBER}
-                '''
-				}
-				}
-            }
-        }
-		
-		stage('Docker-Push-db') {
-            steps {
-                rtDockerPush(
-					serverId: 'artifactory',
-					image: "${DOCKER_REG}/db:db-${BUILD_NUMBER}",
-					targetRepo: 'shuttle-docker-dev/',
-					buildName: "dev-shuttle",
-                    buildNumber: "${BUILD_NUMBER}",
-                )
-                
-            }
-        }
-		
-	}
-    
+
+    }
 }

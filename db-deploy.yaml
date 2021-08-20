@@ -22,7 +22,7 @@ spec:
       imagePullSecrets:
         - name: container-registry
       containers:
-        - image: ${reg_ip}:8082/shuttle-docker-dev/db:db-${build_num}
+        - image: ${reg_ip}/db:db-${build_num}
           name: db
           ports:
             - containerPort: 3306
