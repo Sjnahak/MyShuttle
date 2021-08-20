@@ -21,8 +21,10 @@ import com.microsoft.example.models.*;
 public class DataAccess
 {
 	// Some database-specific details we'll need
-	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://db:3306/MyShuttleDb";
+	//private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+	//private static final String DB_URL = "jdbc:mysql://db:3306/MyShuttleDb";
+	private static final String DB_URL = "jdbc:mysql://db.default.svc.cluster.local:3306/MyShuttleDb";
 	private static final String DB_USER = "user";
 	private static final String DB_PASS = "password";
 	
