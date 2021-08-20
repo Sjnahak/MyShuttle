@@ -21,7 +21,6 @@ pipeline {
 	    stage('Deploy DB') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "db-deploy.yml", kubeconfigId: "mykubeconfig")
 		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
                         configs: 'db-deploy.yaml',
                         enableConfigSubstitution: true,
