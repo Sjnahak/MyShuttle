@@ -23,7 +23,7 @@ spec:
       imagePullSecrets:
         - name: container-registry
       containers:
-        - image: ${reg_ip}/tomcat:tomcat-${build_num}
+        - image: ${DOCKER_REG}/tomcat:tomcat-${build_num}
           name: web
           ports:
             - containerPort: 8080
