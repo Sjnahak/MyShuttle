@@ -12,7 +12,7 @@ pipeline {
                         secretNamespace: 'default',
                         secretName: 'container-registry',
                         dockerCredentials: [
-                            [credentialsId: 'azurecr', url: "\${azurecr_url}"],
+                            [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
                         ]
                     )
 		        }
@@ -27,7 +27,7 @@ pipeline {
                         secretNamespace: 'default',
                         secretName: 'container-registry',
                         dockerCredentials: [
-                            [credentialsId: 'azurecr', url: "\${azurecr_url}"],
+                            [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
                         ]
                     )
 		        }
