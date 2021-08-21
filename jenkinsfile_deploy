@@ -9,11 +9,11 @@ pipeline {
 		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
                         configs: 'web-deploy.yaml',
                         enableConfigSubstitution: true,
-                        secretNamespace: 'default',
-                        secretName: 'container-registry',
-                        dockerCredentials: [
-                            [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
-                        ]
+                        //secretNamespace: 'default',
+                        //secretName: 'container-registry',
+                        //dockerCredentials: [
+                        //    [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
+                        //]
                     )
 		        }
             }
@@ -24,11 +24,11 @@ pipeline {
 		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
                         configs: 'db-deploy.yaml',
                         enableConfigSubstitution: true,
-                        secretNamespace: 'default',
-                        secretName: 'container-registry',
-                        dockerCredentials: [
-                            [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
-                        ]
+                        //secretNamespace: 'default',
+                        //secretName: 'container-registry',
+                        //dockerCredentials: [
+                        //    [credentialsId: 'acr-secret', url: "\${azurecr_url}"],
+                        //]
                     )
 		        }
             }
