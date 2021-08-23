@@ -63,6 +63,28 @@ pipeline {
                 }
             }
         }
+        
+        stage('Deploy web-tier') {
+            steps {
+                script {
+		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
+                        configs: 'web-deploy.yaml',
+                        enableConfigSubstitution: true,
+                    )
+		        }
+            }
+        }
+		
+		stage('Deploy DB') {
+            steps {
+                script {
+		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
+                        configs: 'db-deploy.yaml',
+                        enableConfigSubstitution: true,
+                    )
+		        }
+            }
+        }
 
     }
 }
