@@ -2,14 +2,6 @@ pipeline {
     agent { node { label 'master' } }    
     
 	stages {
-	
-	    stage('terraform validate') {
-            steps {
-                dir ("${WORKSPACE}/terraform"){
-                    sh ''' /usr/bin/terraform validate '''
-                }
-            }
-        }
         stage('init - Plan') {
             steps {
 			    withCredentials([string(credentialsId: 'key', variable: 'key'),
