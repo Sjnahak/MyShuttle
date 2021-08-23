@@ -4,6 +4,9 @@ pipeline {
 
   stages {
         stage('Deploy web deploy') {
+            when {
+                expression { params.deployment_type == 'web-tier'}
+            }
             steps {
                 script {
 		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
@@ -19,6 +22,9 @@ pipeline {
             }
         }
 	    stage('Deploy DB') {
+            when {
+                expression { params.deployment_type == 'db-tier'}
+            }
             steps {
                 script {
 		            kubernetesDeploy(kubeconfigId: 'mykubeconfig',
