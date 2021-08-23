@@ -37,11 +37,12 @@ metadata:
     app: web
   name: web
 spec:
-  type: NodePort
+  #type: NodePort
+  type: LoadBalancer
   ports:
     - name: "web-port"
       port: 8080
       targetPort: 8080
-      nodePort: 30510
+      #nodePort: 30510
   selector:
     app: web
