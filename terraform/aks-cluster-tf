@@ -14,12 +14,9 @@ resource "azurerm_resource_group" "default" {
 
 terraform {
   backend "azurerm" {
-    #resource_group_name  = var.resource-groupname
-    #storage_account_name = ""
-    container_name       = "tfstate"
-    #key                  = ""
   }
 }
+
 #resource "azurerm_kubernetes_cluster" "default" {
 #  name                = "${var.cluster-name}-${var.env-name}"
 #  location            = "Southeast Asia"
