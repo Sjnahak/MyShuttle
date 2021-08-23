@@ -3,20 +3,20 @@ pipeline {
     
 	stages {
 	
-	    stage('approve') {
+	    stage('terraform validate') {
             steps {
                 dir ("${WORKSPACE}/terraform"){
-                    sh ''' ${env.TERRAFORM_HOME}/terraform validate '''
+                    sh ''' /usr/bin/terraform validate '''
                 }
             }
         }
-        stage('Plan') {
+        stage('init - Plan') {
             steps {
 			    dir ("${WORKSPACE}/terraform"){
                 sh '''
-				    ${env.TERRAFORM_HOME}/terraform init -backend-config="storage_account_name=${storage_account_name}" -backend-config="container_name=tfstate" -backend-config="access_key=${access_key}" -backend-config="resource_group_name=${resource_group_name}"
+				    /usr/bin/terraform init -backend-config="storage_account_name=${storage_account_name}" -backend-config="container_name=tfstate" -backend-config="access_key=${access_key}" -backend-config="resource_group_name=${resource_group_name}"
 					
-					${env.TERRAFORM_HOME}/terraform plan -out=tfplan -input=false -var "appId=$(appId)" \
+					/usr/bin/terraform plan -out=tfplan -input=false -var "appId=$(appId)" \
 					    -var "password=$(password)" \
                 '''
                 }
@@ -26,7 +26,7 @@ pipeline {
 		/*stage('terraform plan') {
             steps {
 			    dir ("${WORKSPACE}/terraform"){
-                    sh ''' ${env.TERRAFORM_HOME}/terraform plan -out=tfplan -input=false -var 'resource-groupname=$(resource-groupname)' \
+                    sh ''' /usr/bin/terraform plan -out=tfplan -input=false -var 'resource-groupname=$(resource-groupname)' \
 				        -var "cluster-name=$(cluster-name)" \
 					    -var "env-name=$(env-name)" \
 					    -var "appId=$(appId)" \
@@ -45,7 +45,7 @@ pipeline {
         /*stage('Apply') {
             steps {
 			    dir ("${WORKSPACE}/terraform"){
-                    sh '''${env.TERRAFORM_HOME}/terraform apply -input=false tfplan" 
+                    sh '''/usr/bin/terraform apply -input=false tfplan" 
 					'''
 				}
             }
