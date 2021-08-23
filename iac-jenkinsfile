@@ -10,7 +10,7 @@ pipeline {
 				string(credentialsId: 'resource_group_name', variable: 'resource_group_name')]) {
 			    dir ("${WORKSPACE}/terraform"){
                 sh '''
-				    /usr/bin/terraform init -backend-config="storage_account_name=${storage_account_name}" -backend-config="container_name=tfstate" -backend-config="access_key=${access_key}" -backend-config="resource_group_name=${resource_group_name}" -backend-config="key=${key}"
+				    /usr/bin/terraform init -reconfigure -backend-config="storage_account_name=${storage_account_name}" -backend-config="container_name=test-tfstate" -backend-config="access_key=${access_key}" -backend-config="resource_group_name=${resource_group_name}" -backend-config="key=${key}"
                 '''
                 }
 				}
@@ -31,8 +31,8 @@ pipeline {
 				string(credentialsId: 'password', variable: 'password')]) {
 			        dir ("${WORKSPACE}/terraform"){
                        sh '''
-					       /usr/bin/terraform plan  -input=false -var "appId=$(appId)" \
-					       -var "password=$(password)" \
+					       /usr/bin/terraform plan  -input=false -var "appId=${appId}" \
+					       -var "password=${password}" \
                        '''
                     }
 				}
@@ -43,10 +43,10 @@ pipeline {
             steps {
 			    dir ("${WORKSPACE}/terraform"){
                     sh ''' /usr/bin/terraform plan -out=tfplan -input=false -var 'resource-groupname=$(resource-groupname)' \
-				        -var "cluster-name=$(cluster-name)" \
-					    -var "env-name=$(env-name)" \
-					    -var "appId=$(appId)" \
-					    -var "password=$(password)" \
+				        -var "cluster-name=${cluster-name}" \
+					    -var "env-name=${env-name}" \
+					    -var "appId=${appId}" \
+					    -var "password=${password}" \
 				    '''
 				}
             }
