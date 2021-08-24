@@ -78,7 +78,7 @@ pipeline {
 		    }
             steps {
 			    dir ("${WORKSPACE}/terraform"){
-                    sh '''/usr/bin/terraform destroy -input=false tfplan '''
+                    sh '''/usr/bin/terraform destroy -input=false '''
 				}
             }
         }//main stage 2    
