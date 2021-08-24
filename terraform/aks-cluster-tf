@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "default" {
   name     = "testreourcegroup-rg"
-  location = "West US 2"
+  location = "Southeast Asia"
 
   tags = {
     environment = "Demo"
