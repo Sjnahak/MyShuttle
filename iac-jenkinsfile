@@ -80,7 +80,7 @@ pipeline {
 			    withCredentials([string(credentialsId: 'appId', variable: 'appId'),
 				string(credentialsId: 'password', variable: 'password')]) {
 			    dir ("${WORKSPACE}/terraform"){
-                    sh '''/usr/bin/terraform destroy -input=false -var "appId=${appId}" \
+                    sh '''/usr/bin/terraform destroy -auto-approve -var "appId=${appId}" \
 					    -var "password=${password}"   
 					'''
 				}
