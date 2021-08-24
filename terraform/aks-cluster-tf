@@ -11,11 +11,6 @@ resource "azurerm_resource_group" "default" {
   }
 }
 
-
-terraform {
-  backend "azurerm" {}
-}
-
 #resource "azurerm_kubernetes_cluster" "default" {
 #  name                = "${var.cluster-name}-${var.env-name}"
 #  location            = "Southeast Asia"
