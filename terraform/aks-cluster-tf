@@ -1,15 +1,15 @@
-provider "azurerm" {
-  features {}
-}
+#provider "azurerm" {
+#  features {}
+#}
 
-resource "azurerm_resource_group" "default" {
-  name     = "testreourcegroup-rg"
-  location = "Southeast Asia"
+#resource "azurerm_resource_group" "default" {
+#  name     = "testreourcegroup-rg"
+#  location = "Southeast Asia"
 
-  tags = {
-    environment = "Demo"
-  }
-}
+#  tags = {
+#    environment = "Demo"
+#  }
+#}
 
 #resource "azurerm_kubernetes_cluster" "default" {
 #  name                = "${var.cluster-name}-${var.env-name}"
