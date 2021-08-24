@@ -77,8 +77,13 @@ pipeline {
 		        expression { params.infra == 'destroy'}
 		    }
             steps {
+			    withCredentials([string(credentialsId: 'appId', variable: 'appId'),
+				string(credentialsId: 'password', variable: 'password')]) {
 			    dir ("${WORKSPACE}/terraform"){
-                    sh '''/usr/bin/terraform destroy -input=false '''
+                    sh '''/usr/bin/terraform destroy -input=false -var "appId=${appId}" \
+					    -var "password=${password}"   
+					'''
+				}
 				}
             }
         }//main stage 2    
