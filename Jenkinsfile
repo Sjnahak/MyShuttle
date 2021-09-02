@@ -85,6 +85,21 @@ pipeline {
 		        }
             }
         }
+        
+        stage('Selenium Test Run') {
+            steps {
+                sh 'sleep 10'
+                sh 'mvn test'
+            }
+             
+        }
 
+    }
+    post {
+        always {
+            junit 'target/surefire-reports/junitreports/*.xml' 
+            step( [ $class: 'JacocoPublisher' ] )
+            step([$class: 'Publisher', reportFilenamePattern: '**/testng-results.xml'])
+        }
     }
 }
