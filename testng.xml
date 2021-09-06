@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestSuite" thread-count="1">
+	<parameter name="baseUrl" value="http://appurl-ip:8080/myshuttledev" />
+	<test name="UITEST">
+		<classes>
+			<class name="com.microsoft.example.UITestIT">
+			</class>
+		</classes>
+	</test>
+</suite>
